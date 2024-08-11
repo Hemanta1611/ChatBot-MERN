@@ -4,12 +4,17 @@ console.log(
 );
 */
 // to run use command: npm run dev      -- similar to nodemon --
-import express from 'express';
-const app = express();
-// middlewares
-app.use(express.json());
+import app from "./app.js";
+import { connectToDatabase } from "./db/connections.js";
 // connnections and listneres
-app.listen(5000, () => {
-    console.log("server connected to port 5000");
+const PORT = process.env.PORT || 5000;
+connectToDatabase()
+    .then(() => {
+    app.listen(PORT, () => {
+        console.log("server connected to port & Connected to Database");
+    });
+})
+    .catch((err) => {
+    console.log(err);
 });
 //# sourceMappingURL=index.js.map
