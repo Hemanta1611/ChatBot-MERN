@@ -26,7 +26,7 @@ export const userSignup = async (req: Request, res: Response, next: NextFunction
         const user = new User({name, email, password: hashedPassword});
         await user.save();
 
-        // create token ans save cookie
+        // create token and save cookie
         res.clearCookie(COOKIE_NAME, {
             httpOnly:true,
             domain:"localhost",
