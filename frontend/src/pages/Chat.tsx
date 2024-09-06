@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import red from "@mui/material/colors/red";
 import ChatItem from "../components/chat/ChatItem";
 import { useRef, useState } from "react";
+import { sendChatRequest } from "../helpers/api-communicator";
 
 // const chatMessages = [
 //   { role: "user", content: "Hello, how can you assist me today?" },
@@ -26,12 +27,26 @@ import { useRef, useState } from "react";
 //   },
 // ];
 
+type Message = {
+  role: "user" | "assitant";
+  content: string;
+}
+
 const Chat = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const auth = useAuth();
-  const [chatMessages, setChatMessages] = useState([]);
+  const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const handleSubmit = async () => {
-    console.log(inputRef.current?.value);
+    // console.log(inputRef.current?.value);
+    const content = inputRef.current?.value as string;
+    if(inputRef && inputRef.current){
+      inputRef.current.value = "";
+    }
+    const newMessage: Message = {role: "user", content };
+    setChatMessages((prev) => [...prev, newMessage]);
+    
+    const chatData = await sendChatRequest(content);
+    setChatMessages([...chatData.chats]); 
   };
   return (
     <Box sx={{ display: "flex", flex: 1, width: "100%", mt: 3, gap: 3 }}>
