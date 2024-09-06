@@ -3,8 +3,9 @@ import {IoMdSend} from "react-icons/io";
 import { useAuth } from "../context/AuthContext";
 import red from "@mui/material/colors/red";
 import ChatItem from "../components/chat/ChatItem";
-import { useRef, useState } from "react";
-import { sendChatRequest } from "../helpers/api-communicator";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { getUserChats, sendChatRequest } from "../helpers/api-communicator";
+import toast from "react-hot-toast";
 
 // const chatMessages = [
 //   { role: "user", content: "Hello, how can you assist me today?" },
@@ -48,6 +49,19 @@ const Chat = () => {
     const chatData = await sendChatRequest(content);
     setChatMessages([...chatData.chats]); 
   };
+
+  useLayoutEffect(() => {
+    if(auth?.isLoggedIn && auth.user){
+      toast.loading("Loading Chats", {id: "loadchats"});
+      getUserChats().then((data) => {
+        setChatMessages([...data.chats]);
+        toast.success("Successfully loaded chats", {id: "loadchats"});
+      }).catch((err) => {
+        console.log(err);
+        toast.error("Loading Failed", {id: "loadchats"});
+      })
+    }
+  }, [auth]);
   return (
     <Box sx={{ display: "flex", flex: 1, width: "100%", mt: 3, gap: 3 }}>
       <Box
