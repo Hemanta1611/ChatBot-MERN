@@ -11,7 +11,7 @@ function App() {
   // console.log(useAuth()?.isLoggedIn);
   const auth = useAuth();
   
-  return <main>
+  return ( <main>
     <Header/>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -21,6 +21,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
   </main>
+  );
 }
 
 export default App;

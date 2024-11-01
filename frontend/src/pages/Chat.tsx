@@ -30,7 +30,7 @@ import {useNavigate} from "react-router-dom";
 // ];
 
 type Message = {
-  role: "user" | "assitant";
+  role: "user" | "assistant";
   content: string;
 }
 
@@ -112,7 +112,8 @@ const Chat = () => {
             }}
           >
             {auth?.user?.name[0]}
-            {auth?.user?.name.split(" ")[1][0]}
+            
+            {auth?.user?.name.includes(" ") && auth?.user?.name.split(" ")[1][0]}
           </Avatar>
           <Typography sx={{ mx: "auto", fontFamily: "work sans" }}>
             You are talking to a chatbot

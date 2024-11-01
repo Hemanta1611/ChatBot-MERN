@@ -27,8 +27,13 @@ export const generateChatCompletion = async(req: Request, res: Response, next: N
     
         // get latest response
     } catch (error) {
-        console.log(error);
-        return res.status(500).json({message: "Something went wrong"});
+        console.error("Error in OpenAI API call: ", error.response ? error.response.data : error.message);
+        
+        if (error.response && error.response.data && error.response.data.error.code === 'insufficient_quota') {
+            return res.status(403).json({message: "Insufficient quota. Please check your OpenAI billing."});
+        }
+        
+        return res.status(500).json({message: "Something went wrong", error: error.message});
     }
 
 };
